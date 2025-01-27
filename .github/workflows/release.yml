@@ -1,0 +1,51 @@
+name: Deploy Radzen Blazor App to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  packages: read
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Configure NuGet Source for GitHub Packages
+        run: |
+          if ! dotnet nuget list source | grep -q "github"; then
+            dotnet nuget add source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
+              --name github \
+              --username ${{ github.repository_owner }} \
+              --password ${{ secrets.GITHUB_TOKEN }}
+          fi
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build Blazor app
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Publish Blazor app
+        run: dotnet publish --configuration Release --output published
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          GITHUB_TOKEN: ${{ secrets.NUGET_KEY }}
+          BRANCH: gh-pages # Deployment branch
+          FOLDER: published/wwwroot
+
+      - name: Cleanup
+        run: rm -rf published
