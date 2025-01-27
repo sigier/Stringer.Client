@@ -1,0 +1,37 @@
+@page "/"
+@inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
+@inject DialogService DialogService
+@inject ContextMenuService ContextMenuService
+@inject TooltipService TooltipService
+@inject NotificationService NotificationService
+@using Stringer.Nuget
+
+<RadzenRow Gap="5" RowGap="5">
+    <RadzenColumn Size="12">
+        <RadzenText Text="String Reverse" TextStyle="Radzen.Blazor.TextStyle.DisplayH2" ></RadzenText>
+    </RadzenColumn>
+
+    <RadzenColumn Size="12">
+        <RadzenTextBox @bind-Value="InputText" Placeholder="Type something..."
+                       Style="width:100%;" 
+                       @oninput="@((ChangeEventArgs e) => { if (e?.Value != null) {OnInputTextChanged(e?.Value.ToString()); } })" />
+    </RadzenColumn>
+
+    <RadzenColumn Size="12">
+        <RadzenTextBox Value="@ReversedText" ReadOnly="true"
+                       Placeholder="Reversed text will appear here..."
+                       Style="width:100%;" />
+    </RadzenColumn>
+</RadzenRow>
+
+@code {
+    private string InputText { get; set; } = string.Empty;
+    private string ReversedText { get; set; } = string.Empty;
+
+    private void OnInputTextChanged(string value)
+    {
+        InputText = value;
+        ReversedText = StringFormatter.ReverseString(InputText);
+    }
+}

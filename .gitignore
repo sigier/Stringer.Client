@@ -1,0 +1,103 @@
+# Build artifacts and dependencies
+bin/
+obj/
+*.nuspec
+*.nupkg
+*.snupkg
+*.lock.json
+
+# User-specific files
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Radzen generated files
+.radzen/
+metadata/
+server/
+
+# Package manager files
+node_modules/
+package-lock.json
+yarn.lock
+npm-debug.log*
+
+# NuGet packages
+*.nupkg
+.nuget/
+packages/
+project.lock.json
+project.assets.json
+
+# Environment settings
+.env
+*.env.local
+*.env.development
+*.env.production
+
+# Secrets and configurations
+NuGet.Config
+secrets.json
+appsettings.json
+appsettings.*.json
+
+# Temporary and cache files
+.DS_Store
+Thumbs.db
+*.tmp
+*.bak
+*.swp
+*.swo
+*.sln.cache
+*.log
+
+# Visual Studio cache and extension files
+.vs/
+*.pidb
+*.ilk
+*.pch
+*.pdb
+*.tlog
+
+# Resharper and Rider files
+.idea/
+*.DotSettings.user
+*.ReSharper
+
+# Logs and output
+logs/
+*.log
+
+# Debug files
+*.dbg
+*.ncb
+*.sdf
+*.opendb
+
+# Deployment files
+published/
+publish/
+wwwroot/dist/
+
+# Blazor and WebAssembly artifacts
+dist/
+service-worker-assets.js
+service-worker.js
+wwwroot/css/
+wwwroot/js/
+
+# Blazor auto-generated files
+wwwroot/_framework/
+wwwroot/_content/
+
+# Ignore GitHub Actions workflow runs
+.github/workflows/*.log
+.github/workflows/.DS_Store
+
+# Ignore local security settings
+*.pfx
+*.cer
+*.key
