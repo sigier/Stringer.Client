@@ -14,10 +14,13 @@ obj/
 *.userosscache
 *.sln.docstates
 
+# Ignore all PDB and DLL files globally
+*.pdb
+*.dll
+
 # Radzen generated files
 .radzen/
 metadata/
-server/
 
 # Package manager files
 node_modules/

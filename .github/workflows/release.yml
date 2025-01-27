@@ -16,6 +16,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
@@ -24,29 +26,36 @@ jobs:
 
       - name: Configure NuGet Source for GitHub Packages
         run: |
-          if ! dotnet nuget list source | grep -q "github"; then
-            dotnet nuget add source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
-              --name github \
-              --username ${{ github.repository_owner }} \
-              --password ${{ secrets.GITHUB_TOKEN }} \
-              --store-password-in-clear-text 
-          fi
+          dotnet nuget remove source github || true
+          dotnet nuget add source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
+            --name github \
+            --username "${{ github.repository_owner }}" \
+            --password "${{ secrets.NUGET_KEY }}" \
+            --store-password-in-clear-text
 
-      - name: Restore dependencies
-        run: dotnet restore
+      - name: Set working directory and restore
+        run: |
+          pwd && ls -R
+          dotnet restore Stringer.Client.sln
 
       - name: Build Blazor app
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build Client/Stringer.Client.Client.csproj --configuration Release --no-restore
 
       - name: Publish Blazor app
-        run: dotnet publish --configuration Release --output published
+        run: dotnet publish Client/Stringer.Client.Client.csproj --configuration Release --output published
+
+      - name: Verify Published Output
+        run: ls -R published/wwwroot
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          GITHUB_TOKEN: ${{ secrets.NUGET_KEY }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages # Deployment branch
           FOLDER: published/wwwroot
 
       - name: Cleanup
-        run: rm -rf published
+        run: |
+          if [ -d "published" ]; then 
+            rm -rf published; 
+          fi
