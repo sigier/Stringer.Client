@@ -12,7 +12,9 @@ A basic **Blazor WebAssembly** app built with **Radzen Studio**, using a NuGet p
 
 1. Open the **"Reverse String"** page.
 2. Enter text in the input field.
-3. View the reversed text in real-time.🚀 Deployment
+3. View the reversed text in real-time.
+
+🚀 Deployment
 
 This app is deployed automatically to **GitHub Pages** via GitHub Actions.
 
